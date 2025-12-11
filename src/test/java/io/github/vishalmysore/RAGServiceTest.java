@@ -13,6 +13,11 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+import io.github.vishalmysore.rag.RAGService;
+import io.github.vishalmysore.rag.Document;
+import io.github.vishalmysore.rag.SearchResult;
+import io.github.vishalmysore.rag.MockEmbeddingProvider;
 class RAGServiceTest {
 
     private RAGService ragService;

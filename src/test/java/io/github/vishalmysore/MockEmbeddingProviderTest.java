@@ -3,6 +3,8 @@ package io.github.vishalmysore;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+
+import io.github.vishalmysore.rag.MockEmbeddingProvider;
 class MockEmbeddingProviderTest {
 
     @Test

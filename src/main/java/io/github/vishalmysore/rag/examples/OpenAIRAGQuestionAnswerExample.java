@@ -1,12 +1,12 @@
 package io.github.vishalmysore.rag.examples;
 
-import io.github.vishalmysore.*;
-
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import io.github.vishalmysore.rag.*;
+import io.github.vishalmysore.rag.chunking.*;
 
 /**
  * Complete example demonstrating OpenAI-based RAG question-answering system.

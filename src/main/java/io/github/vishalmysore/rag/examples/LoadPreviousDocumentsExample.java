@@ -1,11 +1,11 @@
 package io.github.vishalmysore.rag.examples;
 
-import io.github.vishalmysore.*;
-
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import io.github.vishalmysore.rag.*;
+import io.github.vishalmysore.rag.chunking.*;
 
 /**
  * Example demonstrating how to load previously indexed documents from the Lucene index.

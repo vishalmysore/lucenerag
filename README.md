@@ -1,6 +1,10 @@
-# Lucene RAG Library
+# Agentic Memory Foundation
 
-A lightweight, serverless library for Retrieval-Augmented Generation (RAG) operations using Apache Lucene with KnnVectorField for semantic search.
+A **lightweight, embedded RAG (Retrieval-Augmented Generation) library** built on Apache Lucene that provides the foundational infrastructure for building **agentic memory systems**. Store and search documents using vector embeddings with advanced chunking strategies—**no external server required**.
+
+## What is Agentic Memory?
+
+This library provides the core RAG infrastructure needed to build agentic memory systems—AI systems that autonomously organize, link, and evolve their knowledge over time. While the full vision of agentic memory includes LLM-driven note construction, autonomous link generation, and dynamic memory evolution, this library delivers the essential foundation: **flexible document storage, advanced chunking strategies, and powerful retrieval mechanisms**.
 
 ## Features
 
@@ -9,8 +13,65 @@ A lightweight, serverless library for Retrieval-Augmented Generation (RAG) opera
 ✅ **Keyword Search** - Traditional full-text search capabilities  
 ✅ **Hybrid Search** - Combine vector and keyword search with custom weights  
 ✅ **Metadata Support** - Attach custom metadata to documents  
+✅ **Advanced Chunking Strategies** - 10+ extensible chunking strategies for optimal document segmentation  
+✅ **Extensible Architecture** - Plugin your own chunking strategies and embedding providers  
 ✅ **Simple API** - Easy to use, clean interface  
 ✅ **Fully Tested** - Comprehensive unit tests included  
+
+## Why "Agentic Memory Foundation"?
+
+This library is positioned as a **foundation** for agentic memory because it provides:
+
+1. **Flexible Knowledge Representation** - Multiple chunking strategies (sliding window, entity-based, topic-based, NER-based, etc.) allow adaptive knowledge organization
+2. **Metadata-Rich Storage** - Documents can carry rich contextual metadata, enabling future link generation and relationship mapping
+3. **Hybrid Retrieval** - Combines vector similarity with keyword search for context-aware retrieval
+4. **Extensible Design** - ChunkingStrategy interface and EmbeddingProvider interface allow custom implementations
+
+**What's Missing for Full Agentic Memory?**
+- LLM-driven autonomous note construction
+- Automatic link generation between related concepts
+- Dynamic memory evolution and consolidation
+- Graph-based context retrieval with relationship traversal
+
+See the [Roadmap](#roadmap) section for planned features.
+
+## Package Structure
+
+```
+io.github.vishalmysore
+├── rag/                           # Core RAG functionality (current implementation)
+│   ├── RAGService.java           # High-level RAG API
+│   ├── LuceneRAGEngine.java      # Low-level Lucene operations
+│   ├── Document.java             # Document model
+│   ├── SearchResult.java         # Search result model
+│   ├── EmbeddingProvider.java    # Embedding interface
+│   ├── OpenAIEmbeddingProvider.java
+│   ├── MockEmbeddingProvider.java
+│   │
+│   ├── chunking/                 # Chunking strategies
+│   │   ├── ChunkingStrategy.java # Interface
+│   │   ├── SlidingWindowChunking.java
+│   │   ├── AdaptiveChunking.java
+│   │   ├── EntityBasedChunking.java
+│   │   ├── TopicBasedChunking.java
+│   │   ├── HybridChunking.java
+│   │   ├── TaskAwareChunking.java
+│   │   ├── HTMLTagBasedChunking.java
+│   │   ├── CodeSpecificChunking.java
+│   │   ├── RegexChunking.java
+│   │   └── NERBasedChunking.java
+│   │
+│   └── examples/                 # Example usage
+│       ├── RAGExample.java
+│       ├── MultiPersonRAGExample.java
+│       ├── BioRAGExample.java
+│       ├── ChunkingStrategiesExample.java
+│       ├── CustomChunkingExample.java
+│       └── NERChunkingExample.java
+│
+└── agenticmemory/                # Future: Full agentic memory features
+    └── (planned for future development)
+```
 
 ## Storage Architecture
 
@@ -39,8 +100,90 @@ This library uses **local file-based storage** via Apache Lucene:
         <artifactId>lucene-queryparser</artifactId>
         <version>9.11.0</version>
     </dependency>
+    
+    <!-- For OpenAI embeddings -->
+    <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>4.12.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.10.1</version>
+    </dependency>
+    
+    <!-- For NER-based chunking (optional) -->
+    <dependency>
+        <groupId>org.apache.opennlp</groupId>
+        <artifactId>opennlp-tools</artifactId>
+        <version>2.3.1</version>
+    </dependency>
 </dependencies>
 ```
+
+## Advanced Chunking Strategies
+
+One of the key features that makes this library suitable as an agentic memory foundation is its **extensible chunking system**. Documents can be broken into chunks using various strategies before indexing, enabling more precise retrieval and knowledge organization.
+
+### Available Chunking Strategies
+
+| Strategy | Use Case | Example |
+|----------|----------|---------|
+| **SlidingWindowChunking** | General text processing | Research papers, articles |
+| **AdaptiveChunking** | Section-based documents | Markdown, structured content |
+| **EntityBasedChunking** | Entity-focused retrieval | Biographical data, company info |
+| **TopicBasedChunking** | Topic segmentation | Multi-topic documents |
+| **HybridChunking** | Complex multi-stage processing | Technical documentation |
+| **TaskAwareChunking** | Task-specific chunking | Different chunking per use case |
+| **HTMLTagBasedChunking** | Web content preservation | HTML documents, web scraping |
+| **CodeSpecificChunking** | Source code files | Python, Java, etc. |
+| **RegexChunking** | Pattern-based splitting | Log files, structured data |
+| **NERBasedChunking** | Automatic entity detection | ML-powered entity extraction |
+
+### Using Chunking Strategies
+
+```java
+import io.github.vishalmysore.*;
+import io.github.vishalmysore.chunking.*;
+
+// Create a chunking strategy
+ChunkingStrategy strategy = new SlidingWindowChunking(150, 30); // 150 words, 30 overlap
+
+// Add document with chunking
+try (RAGService rag = new RAGService(indexPath, embeddings)) {
+    rag.addDocumentWithChunking("doc1", longDocument, strategy);
+    rag.commit();
+    
+    // Each chunk is indexed separately with ID: doc1_chunk_0, doc1_chunk_1, etc.
+}
+```
+
+### Creating Custom Chunking Strategies
+
+Implement the `ChunkingStrategy` interface:
+
+```java
+public class MyCustomChunking implements ChunkingStrategy {
+    @Override
+    public List<String> chunk(String content) {
+        // Your custom logic here
+        return Arrays.asList(content.split("CUSTOM_DELIMITER"));
+    }
+    
+    @Override
+    public String getName() {
+        return "Custom Chunking";
+    }
+    
+    @Override
+    public String getDescription() {
+        return "My custom chunking logic";
+    }
+}
+```
+
+See `examples/ChunkingStrategiesExample.java` and `CHUNKING_STRATEGIES.md` for detailed documentation.
 
 ## Quick Start
 
@@ -306,6 +449,80 @@ Tests cover:
 - Java 18 or higher
 - Maven 3.6+
 - No external services (Qdrant, Elasticsearch, etc.)
+
+## Roadmap to Full Agentic Memory
+
+This library currently provides the **foundational RAG infrastructure**. To evolve into a full agentic memory system, the following features are planned for the `io.github.vishalmysore.agenticmemory` package:
+
+### Phase 1: Enhanced Knowledge Organization (Current)
+- ✅ Multiple chunking strategies (10+ implementations)
+- ✅ Extensible chunking architecture
+- ✅ Metadata-rich document storage
+- ✅ Hybrid search (vector + keyword)
+- ✅ NER-based entity extraction
+
+### Phase 2: Autonomous Note Construction (Planned)
+- ⏳ LLM-driven note generation from raw content
+- ⏳ Automatic summarization and condensation
+- ⏳ Multi-document synthesis
+- ⏳ Hierarchical note organization
+
+### Phase 3: Link Generation & Knowledge Graph (Planned)
+- ⏳ Automatic relationship detection between documents
+- ⏳ Entity co-occurrence analysis
+- ⏳ Temporal link tracking
+- ⏳ Graph-based traversal API
+- ⏳ Semantic link types (supports, contradicts, extends, etc.)
+
+### Phase 4: Dynamic Memory Evolution (Planned)
+- ⏳ Adaptive memory consolidation
+- ⏳ Importance-based pruning
+- ⏳ Temporal decay mechanisms
+- ⏳ Knowledge update propagation
+- ⏳ Conflict resolution strategies
+
+### Phase 5: Context-Aware Retrieval (Planned)
+- ⏳ Query expansion using knowledge graph
+- ⏳ Multi-hop reasoning
+- ⏳ Contextual relevance scoring
+- ⏳ Conversation-aware retrieval
+- ⏳ Personalized memory access
+
+### Contributing to the Roadmap
+
+We welcome contributions! If you're interested in helping build the agentic memory features:
+
+1. **Chunking Strategies** - Add new chunking implementations (see `CustomChunkingExample.java`)
+2. **Embedding Providers** - Integrate additional embedding models
+3. **Memory Evolution** - Implement consolidation algorithms
+4. **Link Generation** - Build entity relationship extractors
+5. **Documentation** - Improve examples and guides
+
+See `CONTRIBUTING.md` (coming soon) for guidelines.
+
+## Why This Architecture?
+
+### Current Strengths (RAG Foundation)
+- **Local-first**: No external dependencies, pure file-based storage
+- **Flexible**: Multiple chunking strategies for different content types
+- **Extensible**: Plugin architecture for custom strategies and providers
+- **Efficient**: Lucene's HNSW algorithm for fast vector search
+- **Metadata-rich**: Supports arbitrary key-value annotations
+
+### Design Decisions for Agentic Memory
+- **Separation of Concerns**: Core RAG (`io.github.vishalmysore.rag`) vs. Agentic features (`io.github.vishalmysore.agenticmemory`)
+- **Interface-driven**: `ChunkingStrategy` and `EmbeddingProvider` interfaces enable extensibility
+- **Metadata Foundation**: Rich metadata support enables future link tracking and relationship mapping
+- **Chunking Flexibility**: Different chunking strategies lay groundwork for task-aware knowledge organization
+
+## Related Projects & Inspiration
+
+- **A-Mem Paper** - "Agentic Memory: Autonomous Systems with Adaptive Recall" (inspiration for project vision)
+- **LangChain** - General-purpose RAG framework (heavier, Python-focused)
+- **LlamaIndex** - Document indexing framework (requires external services)
+- **Qdrant** - Vector database server (separate process, network overhead)
+
+**Our Difference**: Embedded, Java-native, extensible chunking, no external servers, agentic roadmap.
 
 ## License
 

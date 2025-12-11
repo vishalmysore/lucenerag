@@ -1,6 +1,6 @@
-package io.github.vishalmysore.chunking;
+package io.github.vishalmysore.rag.chunking;
 
-import io.github.vishalmysore.ChunkingStrategy;
+import io.github.vishalmysore.rag.ChunkingStrategy;
 
 import java.util.*;
 

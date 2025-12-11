@@ -1,6 +1,6 @@
-# Chunking Strategies Framework
+# Chunking Strategies Deep Dive
 
-The LuceneRAG library includes an extensible chunking framework that allows you to split documents into optimal chunks for semantic search and retrieval.
+The Agentic Memory library includes an extensible chunking framework that allows you to split documents into optimal chunks for semantic search and retrieval.
 
 ## Architecture
 

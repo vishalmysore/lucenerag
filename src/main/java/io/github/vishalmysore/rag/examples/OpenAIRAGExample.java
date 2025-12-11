@@ -1,9 +1,9 @@
 package io.github.vishalmysore.rag.examples;
 
-import io.github.vishalmysore.*;
-
 import java.nio.file.Paths;
 import java.util.List;
+import io.github.vishalmysore.rag.*;
+import io.github.vishalmysore.rag.chunking.*;
 
 /**
  * Example demonstrating how to use the OpenAI embedding provider with RAGService.

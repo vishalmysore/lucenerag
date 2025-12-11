@@ -1,10 +1,12 @@
-package io.github.vishalmysore;
+package io.github.vishalmysore.rag.examples;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import io.github.vishalmysore.rag.*;
+import io.github.vishalmysore.rag.chunking.*;
 
 /**
  * Example usage of the Lucene RAG Library

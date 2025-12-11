@@ -1,4 +1,4 @@
-package io.github.vishalmysore;
+package io.github.vishalmysore.rag;
 
 import java.io.IOException;
 import java.nio.file.Path;

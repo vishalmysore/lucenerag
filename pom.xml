@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.vishalmysore</groupId>
-    <artifactId>lucenerag</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>agenticmemory</artifactId>
+    <version>0.0.9</version>
     <packaging>jar</packaging>
 
-    <name>Lucene RAG Library</name>
+    <name>Agntic Memory RAG Library</name>
     <description>A library for Retrieval-Augmented Generation (RAG) operations using Apache Lucene with KnnVectorField</description>
 
     <properties>

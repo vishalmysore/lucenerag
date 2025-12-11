@@ -1,4 +1,4 @@
-package io.github.vishalmysore;
+package io.github.vishalmysore.rag;
 
 /**
  * Interface for generating text embeddings.

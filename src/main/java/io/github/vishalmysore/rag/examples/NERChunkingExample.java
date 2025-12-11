@@ -1,9 +1,9 @@
 package io.github.vishalmysore.rag.examples;
 
-import io.github.vishalmysore.OpenAIEmbeddingProvider;
-import io.github.vishalmysore.RAGService;
-import io.github.vishalmysore.SearchResult;
-import io.github.vishalmysore.chunking.NERBasedChunking;
+import io.github.vishalmysore.rag.OpenAIEmbeddingProvider;
+import io.github.vishalmysore.rag.RAGService;
+import io.github.vishalmysore.rag.SearchResult;
+import io.github.vishalmysore.rag.chunking.NERBasedChunking;
 
 import java.nio.file.Paths;
 import java.util.List;

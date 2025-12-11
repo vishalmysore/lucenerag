@@ -5,6 +5,8 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+import io.github.vishalmysore.rag.OpenAIEmbeddingProvider;
 class OpenAIEmbeddingProviderTest {
 
     @Test

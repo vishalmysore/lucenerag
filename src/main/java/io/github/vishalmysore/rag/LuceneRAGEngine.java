@@ -1,4 +1,4 @@
-package io.github.vishalmysore;
+package io.github.vishalmysore.rag;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
