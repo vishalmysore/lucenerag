@@ -33,7 +33,7 @@ This library is positioned as a **foundation** for agentic memory because it pro
 - Dynamic memory evolution and consolidation
 - Graph-based context retrieval with relationship traversal
 
-See the [Roadmap](#roadmap) section for planned features.
+
 
 
 ## Storage Architecture
@@ -44,46 +44,7 @@ This library uses **local file-based storage** via Apache Lucene:
 - **File-based index** - Lucene creates and manages index files on your local filesystem
 - **Embedded solution** - Everything runs in your Java application process
 
-## Dependencies
 
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.apache.lucene</groupId>
-        <artifactId>lucene-core</artifactId>
-        <version>9.11.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.lucene</groupId>
-        <artifactId>lucene-analysis-common</artifactId>
-        <version>9.11.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.lucene</groupId>
-        <artifactId>lucene-queryparser</artifactId>
-        <version>9.11.0</version>
-    </dependency>
-    
-    <!-- For OpenAI embeddings -->
-    <dependency>
-        <groupId>com.squareup.okhttp3</groupId>
-        <artifactId>okhttp</artifactId>
-        <version>4.12.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>2.10.1</version>
-    </dependency>
-    
-    <!-- For NER-based chunking (optional) -->
-    <dependency>
-        <groupId>org.apache.opennlp</groupId>
-        <artifactId>opennlp-tools</artifactId>
-        <version>2.3.1</version>
-    </dependency>
-</dependencies>
-```
 
 ## Advanced Chunking Strategies
 
