@@ -452,6 +452,209 @@ See `CONTRIBUTING.md` (coming soon) for guidelines.
 
 This project is available under standard open source licenses.
 
+---
+
+## 🧠 Zettelkasten-Style Knowledge Management
+
+The library now includes a complete **Zettelkasten-style linking system** for advanced knowledge management, built on top of the agentic memory foundation. This system enables atomic note creation, automatic link generation, and graph-based knowledge navigation.
+
+### Key Features
+
+✅ **Atomic Notes (ZettelNote)** - Single-concept notes with bidirectional links  
+✅ **Automatic Link Generation** - Entity, semantic, and tag-based connections  
+✅ **Graph Algorithms** - BFS/DFS traversal, shortest paths, connected components  
+✅ **Link-Aware Retrieval** - Context expansion via graph traversal  
+✅ **Entity Extraction** - OpenNLP + pattern-based entity detection  
+✅ **Atomic Chunking** - Splits content into linkable atomic ideas (300-500 words)  
+✅ **Link Storage** - Persistent link management in RAG index with caching  
+✅ **Graph Analytics** - Centrality, bridge detection, cluster analysis  
+
+### Core Components
+
+#### 1. **ZettelNote** - Enhanced Note Structure
+```java
+ZettelNote note = new ZettelNote.Builder()
+    .id("note-1")
+    .content("Machine learning is a subset of AI...")
+    .summary("ML overview")
+    .tags(Arrays.asList("machine-learning", "ai"))
+    .entities(Arrays.asList("Machine Learning", "AI"))
+    .build();
+
+// Atomicity validation
+if (note.isAtomic()) {
+    System.out.println("Note focuses on a single concept");
+}
+
+// Connectivity metrics
+double score = note.getConnectivityScore(); // link count × avg strength
+```
+
+#### 2. **ZettelkastenRAGService** - Main API
+```java
+// Initialize with index path and embeddings
+ZettelkastenRAGService zettelRAG = new ZettelkastenRAGService(
+    "zettelkasten-index",
+    new MockEmbeddingProvider(128)
+);
+
+// Create atomic notes with auto-linking
+ZettelNote note1 = zettelRAG.createNote(
+    "Neural networks consist of layers of interconnected nodes...",
+    Arrays.asList("neural-networks", "deep-learning")
+);
+
+// Links are automatically generated based on:
+// - Entity co-occurrence
+// - Semantic similarity (embeddings)
+// - Tag overlap
+
+// Explore auto-generated links
+for (Link link : note1.getOutgoingLinks()) {
+    System.out.printf("%s -> %s [%s, strength: %.2f]\n",
+        link.getSourceNoteId(),
+        link.getTargetNoteId(),
+        link.getType(),
+        link.getStrength()
+    );
+}
+```
+
+#### 3. **Graph-Based Retrieval**
+```java
+// Traditional RAG: Top-K direct matches
+List<SearchResult> direct = zettelRAG.search("neural networks", 3);
+
+// Zettelkasten RAG: Context-expanded retrieval
+String context = zettelRAG.retrieveContextWithLinks(
+    "neural networks",
+    topK: 3,
+    linkDepth: 2  // Include notes within 2 hops
+);
+
+// Context now includes directly matching notes + linked notes
+// Example: "neural networks" query also retrieves:
+// - Notes about "backpropagation" (linked via ELABORATES)
+// - Notes about "deep learning" (linked via SIMILAR_TOPIC)
+// - Notes about "activation functions" (linked via REFERENCES)
+```
+
+#### 4. **Graph Traversal & Analytics**
+```java
+ZettelkastenGraph graph = zettelRAG.getGraph();
+
+// BFS traversal from a note (explore knowledge neighborhood)
+List<ZettelNote> neighborhood = graph.traverseFromNote("note-1", maxDepth: 2);
+
+// Find shortest path between concepts
+List<ZettelNote> path = graph.findPath("neural-networks-note", "backprop-note");
+
+// Identify knowledge hubs (most connected notes)
+List<ZettelNote> hubs = graph.getMostConnectedNotes(topN: 5);
+
+// Detect knowledge clusters
+List<List<String>> clusters = graph.findConnectedComponents();
+
+// Find critical bridge notes (connecting different clusters)
+List<String> bridges = graph.findBridgeNotes();
+```
+
+#### 5. **Link Types**
+The system automatically assigns link types based on relationship characteristics:
+
+| Link Type | Description | Example |
+|-----------|-------------|---------|
+| `REFERENCES` | High semantic similarity (>0.7) | "Neural networks" ↔ "Deep learning" |
+| `ELABORATES` | Detailed expansion of concept | "ML overview" ↔ "Gradient descent explained" |
+| `CONTRADICTS` | Opposing viewpoints | "Frequentist stats" ↔ "Bayesian approach" |
+| `SIMILAR_TOPIC` | Tag overlap | Notes tagged "machine-learning" |
+| `RELATED_ENTITY` | Entity co-occurrence | Both mention "TensorFlow" |
+| `CAUSES` | Causal relationship | "Overfitting" ↔ "Small dataset" |
+
+#### 6. **Entity-Based Search**
+```java
+// Find notes containing specific entities
+List<ZettelNote> notes = zettelRAG.findByEntities(
+    Arrays.asList("Zettelkasten", "Luhmann")
+);
+
+// Find notes with specific tags
+List<ZettelNote> tagged = zettelRAG.findByTags(
+    Arrays.asList("knowledge-management", "productivity")
+);
+```
+
+#### 7. **ZettelkastenChunking** - Atomic Idea Detection
+```java
+ChunkingStrategy atomicChunking = new ZettelkastenChunking(
+    minChunkSize: 100,
+    maxChunkSize: 500,
+    targetChunkSize: 300  // Optimal for linking
+);
+
+// Splits on:
+// - Markdown headings (#{1,6})
+// - List boundaries
+// - Logical connectors ("therefore", "however", "furthermore")
+
+List<String> atomicIdeas = atomicChunking.chunk(longDocument);
+// Each chunk = 1 linkable concept (Zettelkasten principle)
+```
+
+### Complete Example
+
+See `ZettelkastenExample.java` for a comprehensive 11-step demonstration:
+
+1. Create 5 atomic notes with automatic link generation
+2. Explore auto-generated links (outgoing, incoming, types)
+3. View graph statistics (nodes, edges, connectivity)
+4. Traverse knowledge graph (BFS from starting note)
+5. Find shortest paths between concepts
+6. Identify knowledge hubs (most connected notes)
+7. Link-aware context retrieval (graph-expanded search)
+8. Entity-based search
+9. Tag-based search
+10. Link type distribution analysis
+11. Detect connected components (knowledge clusters)
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│          ZettelkastenRAGService (Main API)          │
+│  - createNote() with auto-linking                   │
+│  - retrieveContextWithLinks()                       │
+│  - findByEntities() / findByTags()                  │
+└────────────────┬────────────────────────────────────┘
+                 │
+      ┌──────────┼──────────┐
+      │          │          │
+┌─────▼────┐ ┌──▼───────┐ ┌▼────────────┐
+│ ZettelNote│ │LinkStorage│ │ Zettel-     │
+│  (Notes)  │ │ (Persist) │ │ kastenGraph │
+│ - Atomic  │ │ - Cache   │ │ - BFS/DFS   │
+│ - Links   │ │ - RAG idx │ │ - Paths     │
+└───────────┘ └───────────┘ │ - Clusters  │
+                             └─────────────┘
+      ┌──────────┴──────────┐
+      │                     │
+┌─────▼────────┐   ┌────────▼──────┐
+│EntityExtractor│   │Zettelkasten-  │
+│- OpenNLP NER │   │  Chunking     │
+│- Patterns    │   │- Atomic ideas │
+└──────────────┘   └───────────────┘
+```
+
+### Zettelkasten Principles Implemented
+
+1. **Atomicity** - Each note represents one concept
+2. **Connectivity** - Bidirectional links between notes
+3. **Emergent Structure** - Graph forms organically through linking
+4. **Link Types** - Explicit relationship semantics
+5. **Discoverability** - Graph algorithms for knowledge exploration
+
+---
+
 ## Example Output
 
 ```

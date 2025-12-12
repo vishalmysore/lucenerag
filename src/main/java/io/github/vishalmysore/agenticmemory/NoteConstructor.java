@@ -72,7 +72,7 @@ public class NoteConstructor implements AutoCloseable {
     /**
      * Generate a concise summary using LLM
      */
-    private String generateSummary(String content) throws IOException {
+    public String generateSummary(String content) throws IOException {
         String prompt = "Provide a concise 1-2 sentence summary of the following text:\n\n" + content;
         return callLLM(prompt, 100);
     }
