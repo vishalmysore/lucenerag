@@ -355,74 +355,10 @@ You'll see files like:
 
 **No server process runs** - the index is just files that Lucene reads/writes.
 
-## Running Tests
 
-```bash
-mvn test
-```
 
-Tests cover:
-- Document building and validation
-- Vector search accuracy
-- Metadata handling
-- CRUD operations
-- Edge cases and error handling
 
-## Requirements
 
-- Java 18 or higher
-- Maven 3.6+
-- No external services (Qdrant, Elasticsearch, etc.)
-
-## Roadmap to Full Agentic Memory
-
-This library currently provides the **foundational RAG infrastructure**. To evolve into a full agentic memory system, the following features are planned for the `io.github.vishalmysore.agenticmemory` package:
-
-### Phase 1: Enhanced Knowledge Organization (Current)
-- ✅ Multiple chunking strategies (10+ implementations)
-- ✅ Extensible chunking architecture
-- ✅ Metadata-rich document storage
-- ✅ Hybrid search (vector + keyword)
-- ✅ NER-based entity extraction
-
-### Phase 2: Autonomous Note Construction (Planned)
-- ⏳ LLM-driven note generation from raw content
-- ⏳ Automatic summarization and condensation
-- ⏳ Multi-document synthesis
-- ⏳ Hierarchical note organization
-
-### Phase 3: Link Generation & Knowledge Graph (Planned)
-- ⏳ Automatic relationship detection between documents
-- ⏳ Entity co-occurrence analysis
-- ⏳ Temporal link tracking
-- ⏳ Graph-based traversal API
-- ⏳ Semantic link types (supports, contradicts, extends, etc.)
-
-### Phase 4: Dynamic Memory Evolution (Planned)
-- ⏳ Adaptive memory consolidation
-- ⏳ Importance-based pruning
-- ⏳ Temporal decay mechanisms
-- ⏳ Knowledge update propagation
-- ⏳ Conflict resolution strategies
-
-### Phase 5: Context-Aware Retrieval (Planned)
-- ⏳ Query expansion using knowledge graph
-- ⏳ Multi-hop reasoning
-- ⏳ Contextual relevance scoring
-- ⏳ Conversation-aware retrieval
-- ⏳ Personalized memory access
-
-### Contributing to the Roadmap
-
-We welcome contributions! If you're interested in helping build the agentic memory features:
-
-1. **Chunking Strategies** - Add new chunking implementations (see `CustomChunkingExample.java`)
-2. **Embedding Providers** - Integrate additional embedding models
-3. **Memory Evolution** - Implement consolidation algorithms
-4. **Link Generation** - Build entity relationship extractors
-5. **Documentation** - Improve examples and guides
-
-See `CONTRIBUTING.md` (coming soon) for guidelines.
 
 ## Why This Architecture?
 
@@ -439,24 +375,12 @@ See `CONTRIBUTING.md` (coming soon) for guidelines.
 - **Metadata Foundation**: Rich metadata support enables future link tracking and relationship mapping
 - **Chunking Flexibility**: Different chunking strategies lay groundwork for task-aware knowledge organization
 
-## Related Projects & Inspiration
-
-- **A-Mem Paper** - "Agentic Memory: Autonomous Systems with Adaptive Recall" (inspiration for project vision)
-- **LangChain** - General-purpose RAG framework (heavier, Python-focused)
-- **LlamaIndex** - Document indexing framework (requires external services)
-- **Qdrant** - Vector database server (separate process, network overhead)
-
-**Our Difference**: Embedded, Java-native, extensible chunking, no external servers, agentic roadmap.
-
-## License
-
-This project is available under standard open source licenses.
 
 ---
 
 ## 🧠 Zettelkasten-Style Knowledge Management
 
-The library now includes a complete **Zettelkasten-style linking system** for advanced knowledge management, built on top of the agentic memory foundation. This system enables atomic note creation, automatic link generation, and graph-based knowledge navigation.
+Library includes  complete **Zettelkasten-style linking system** for advanced knowledge management, built on top of the agentic memory foundation. This system enables atomic note creation, automatic link generation, and graph-based knowledge navigation.
 
 ### Key Features
 
@@ -672,3 +596,40 @@ Total documents indexed: 3
 ```
 
 
+## Roadmap to Full Agentic Memory
+
+This library currently provides the **foundational RAG infrastructure**. To evolve into a full agentic memory system, the following features are planned for the `io.github.vishalmysore.agenticmemory` package:
+
+### Phase 1: Enhanced Knowledge Organization (Current)
+- ✅ Multiple chunking strategies (10+ implementations)
+- ✅ Extensible chunking architecture
+- ✅ Metadata-rich document storage
+- ✅ Hybrid search (vector + keyword)
+- ✅ NER-based entity extraction
+
+### Phase 2: Autonomous Note Construction (Planned)
+- ⏳ LLM-driven note generation from raw content
+- ⏳ Automatic summarization and condensation
+- ⏳ Multi-document synthesis
+- ⏳ Hierarchical note organization
+
+### Phase 3: Link Generation & Knowledge Graph (Planned)
+- ⏳ Automatic relationship detection between documents
+- ⏳ Entity co-occurrence analysis
+- ⏳ Temporal link tracking
+- ⏳ Graph-based traversal API
+- ⏳ Semantic link types (supports, contradicts, extends, etc.)
+
+### Phase 4: Dynamic Memory Evolution (Planned)
+- ⏳ Adaptive memory consolidation
+- ⏳ Importance-based pruning
+- ⏳ Temporal decay mechanisms
+- ⏳ Knowledge update propagation
+- ⏳ Conflict resolution strategies
+
+### Phase 5: Context-Aware Retrieval (Planned)
+- ⏳ Query expansion using knowledge graph
+- ⏳ Multi-hop reasoning
+- ⏳ Contextual relevance scoring
+- ⏳ Conversation-aware retrieval
+- ⏳ Personalized memory access
