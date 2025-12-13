@@ -11,7 +11,13 @@
 
     <name>Agntic Memory RAG Library</name>
     <description>A library for Retrieval-Augmented Generation (RAG) operations using Apache Lucene with KnnVectorField</description>
-
+    <distributionManagement>
+    <repository>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/vishalmysore/agenticmemory</url>
+    </repository>
+   </distributionManagement>
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
