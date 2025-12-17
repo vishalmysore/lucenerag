@@ -41,26 +41,24 @@ public class NERChunkingExample {
         System.out.println("=== NER-Based Chunking Example ===\n");
 
         // Sample news article with multiple entities
-        String newsArticle = """
-            TECH NEWS DIGEST - January 15, 2025
-            
-            Elon Musk announced a groundbreaking new AI initiative at Tesla's headquarters in Palo Alto.
-            The project aims to integrate advanced neural networks into Tesla's Autopilot system.
-            According to sources at SpaceX, Musk is also exploring similar technology for spacecraft navigation.
-            
-            Meanwhile, Mark Zuckerberg revealed Meta's latest virtual reality advancements at the company's 
-            Menlo Park campus. The new Quest 4 headset features unprecedented processing power developed 
-            in collaboration with Qualcomm.
-            
-            In other news, Tim Cook spoke at Apple's Cupertino headquarters about the company's commitment 
-            to sustainable manufacturing. Apple plans to achieve complete carbon neutrality by 2030.
-            
-            Jeff Bezos, through Blue Origin, announced plans for a new lunar mission scheduled for late 2026.
-            The mission will launch from Cape Canaveral and aims to establish a permanent research base.
-            
-            Google's Sundar Pichai discussed the company's AI research at the Mountain View campus,
-            highlighting breakthroughs in natural language processing and quantum computing initiatives.
-            """;
+        String newsArticle = "TECH NEWS DIGEST - January 15, 2025\n" +
+            "\n" +
+            "Elon Musk announced a groundbreaking new AI initiative at Tesla's headquarters in Palo Alto.\n" +
+            "The project aims to integrate advanced neural networks into Tesla's Autopilot system.\n" +
+            "According to sources at SpaceX, Musk is also exploring similar technology for spacecraft navigation.\n" +
+            "\n" +
+            "Meanwhile, Mark Zuckerberg revealed Meta's latest virtual reality advancements at the company's \n" +
+            "Menlo Park campus. The new Quest 4 headset features unprecedented processing power developed \n" +
+            "in collaboration with Qualcomm.\n" +
+            "\n" +
+            "In other news, Tim Cook spoke at Apple's Cupertino headquarters about the company's commitment \n" +
+            "to sustainable manufacturing. Apple plans to achieve complete carbon neutrality by 2030.\n" +
+            "\n" +
+            "Jeff Bezos, through Blue Origin, announced plans for a new lunar mission scheduled for late 2026.\n" +
+            "The mission will launch from Cape Canaveral and aims to establish a permanent research base.\n" +
+            "\n" +
+            "Google's Sundar Pichai discussed the company's AI research at the Mountain View campus, " +
+            "highlighting breakthroughs in natural language processing and quantum computing initiatives.";
 
         // Paths to OpenNLP models
         String personModel = "src/main/resources/opennlp-models/en-ner-person.bin";

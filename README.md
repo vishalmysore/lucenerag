@@ -579,6 +579,197 @@ See `ZettelkastenExample.java` for a comprehensive 11-step demonstration:
 
 ---
 
+## 🦉 OWL Ontology Graph Chunking
+
+The library includes specialized **OWL (Web Ontology Language) graph chunking** capabilities for processing and breaking down large ontologies into manageable, semantically coherent chunks. This feature is designed for knowledge graph applications and is compatible with **Protege plugin architecture** (no Protege dependencies required).
+
+### Key Features
+
+✅ **Multiple Input Methods** - Load from File, InputStream, or OWLOntology object  
+✅ **7 Chunking Strategies** - Class-based, namespace, size, depth, module extraction, connected components, annotation-based  
+✅ **Protege Compatible** - Designed for integration as Protege plugin (zero Protege dependencies)  
+✅ **Semantic Coherence** - Maintains logical relationships within chunks  
+✅ **Metadata Tracking** - Each chunk includes rich metadata about its contents  
+✅ **Extensible Design** - Easy to add custom OWL chunking strategies  
+
+### Available OWL Chunking Strategies
+
+| Strategy | Description | Use Case |
+|----------|-------------|----------|
+| **CLASS_BASED** | Chunks by class hierarchies preserving inheritance | Ontologies with clear class structures |
+| **NAMESPACE_BASED** | Chunks by namespace/URI prefixes | Multi-namespace ontologies |
+| **SIZE_BASED** | Chunks by maximum axiom count while maintaining entity coherence | Large ontologies needing size limits |
+| **DEPTH_BASED** | Chunks by hierarchy depth levels | Deeply nested class hierarchies |
+| **MODULE_EXTRACTION** | Extracts self-contained ontology modules | Modular ontology design |
+| **CONNECTED_COMPONENT** | Chunks by graph connectivity analysis | Loosely coupled ontologies |
+| **ANNOTATION_BASED** | Chunks by annotation properties (rdfs:label, rdfs:comment) | Well-annotated ontologies |
+
+### Basic Usage
+
+```java
+import io.github.vishalmysore.graph.*;
+import java.io.File;
+
+// Create chunker with desired strategy
+OWLGraphChunker chunker = new OWLGraphChunker(OWLChunkingStrategy.CLASS_BASED);
+
+// Load OWL file
+File owlFile = new File("path/to/ontology.owl");
+chunker.loadFromFile(owlFile);
+
+// View ontology statistics
+System.out.println(chunker.getOntologyStats());
+
+// Perform chunking
+List<OWLChunk> chunks = chunker.chunk();
+
+// Process chunks
+for (OWLChunk chunk : chunks) {
+    System.out.println("Chunk: " + chunk.getId());
+    System.out.println("Axioms: " + chunk.getAxiomCount());
+    System.out.println("Metadata: " + chunk.getMetadata());
+    
+    // Get OWL representation
+    String owlString = chunk.toOWLString();
+}
+```
+
+### Load from InputStream (Protege Plugin Use Case)
+
+```java
+// Perfect for Protege plugins or when ontology is not a file
+try (InputStream inputStream = new FileInputStream(owlFile)) {
+    chunker.loadFromStream(inputStream);
+    List<OWLChunk> chunks = chunker.chunk();
+}
+```
+
+### Load Existing OWLOntology Object
+
+```java
+// For Protege integration - use the active ontology
+OWLOntology ontology = ...; // From Protege API
+chunker.loadOntology(ontology);
+List<OWLChunk> chunks = chunker.chunk();
+```
+
+### Strategy Examples
+
+#### 1. Class-Based Chunking
+```java
+OWLGraphChunker chunker = new OWLGraphChunker(OWLChunkingStrategy.CLASS_BASED);
+chunker.loadFromFile(new File("ontology.owl"));
+List<OWLChunk> chunks = chunker.chunk();
+
+// Each chunk contains a top-level class + subclasses + related properties
+for (OWLChunk chunk : chunks) {
+    String topClass = (String) chunk.getMetadata().get("topClass");
+    int relatedClasses = (Integer) chunk.getMetadata().get("relatedClasses");
+    System.out.printf("Chunk: %s (Top class: %s, Related: %d)\n", 
+        chunk.getId(), topClass, relatedClasses);
+}
+```
+
+#### 2. Size-Based Chunking
+```java
+OWLGraphChunker chunker = new OWLGraphChunker(OWLChunkingStrategy.SIZE_BASED);
+chunker.setMaxChunkSize(500); // Max 500 axioms per chunk
+chunker.loadFromFile(new File("large-ontology.owl"));
+
+List<OWLChunk> chunks = chunker.chunk();
+// Each chunk ≤ 500 axioms, entity coherence maintained
+```
+
+#### 3. Namespace-Based Chunking
+```java
+OWLGraphChunker chunker = new OWLGraphChunker(OWLChunkingStrategy.NAMESPACE_BASED);
+chunker.loadFromFile(new File("multi-namespace-ontology.owl"));
+
+List<OWLChunk> chunks = chunker.chunk();
+// Axioms grouped by their namespace URIs
+for (OWLChunk chunk : chunks) {
+    String namespace = (String) chunk.getMetadata().get("namespace");
+    System.out.println("Namespace: " + namespace);
+}
+```
+
+#### 4. Module Extraction
+```java
+OWLGraphChunker chunker = new OWLGraphChunker(OWLChunkingStrategy.MODULE_EXTRACTION);
+chunker.loadFromFile(new File("ontology.owl"));
+
+List<OWLChunk> chunks = chunker.chunk();
+// Self-contained modules based on syntactic locality
+for (OWLChunk chunk : chunks) {
+    int seedEntities = (Integer) chunk.getMetadata().get("seedEntityCount");
+    System.out.printf("Module with %d seed entities, %d axioms\n", 
+        seedEntities, chunk.getAxiomCount());
+}
+```
+
+### Protege Plugin Integration Example
+
+```java
+public class MyProtegePlugin {
+    
+    public void chunkActiveOntology(OWLOntology ontology) {
+        // Use existing ontology from Protege
+        OWLGraphChunker chunker = new OWLGraphChunker(
+            OWLChunkingStrategy.CLASS_BASED
+        );
+        
+        chunker.loadOntology(ontology);
+        List<OWLChunk> chunks = chunker.chunk();
+        
+        // Process chunks in Protege UI
+        displayChunksInUI(chunks);
+    }
+    
+    private void displayChunksInUI(List<OWLChunk> chunks) {
+        // Your Protege UI code here
+    }
+}
+```
+
+### OWL Package Structure
+
+```
+io.github.vishalmysore.graph/
+├── OWLGraphChunker.java          # Main API
+├── OWLChunk.java                 # Chunk representation
+├── OWLChunkingStrategy.java      # Strategy enum
+├── ClassBasedChunker.java        # Class hierarchy chunking
+├── NamespaceBasedChunker.java    # Namespace chunking
+├── SizeBasedChunker.java         # Size-limited chunking
+├── DepthBasedChunker.java        # Depth-based chunking
+├── ModuleExtractionChunker.java  # Module extraction
+├── ConnectedComponentChunker.java # Graph connectivity
+├── AnnotationBasedChunker.java   # Annotation-based
+└── OWLGraphChunkerExample.java   # Usage examples
+```
+
+### Dependencies
+
+Only **OWL API 5.5.0** is required (automatically added via Maven):
+
+```xml
+<dependency>
+    <groupId>net.sourceforge.owlapi</groupId>
+    <artifactId>owlapi-distribution</artifactId>
+    <version>5.5.0</version>
+</dependency>
+```
+
+### Why OWL Graph Chunking?
+
+- **Large Ontology Processing** - Break down massive ontologies for incremental processing
+- **Distributed Processing** - Distribute chunks across multiple workers
+- **Focused Analysis** - Analyze specific ontology modules independently
+- **RAG for Ontologies** - Index ontology chunks for semantic search over knowledge graphs
+- **Protege Extensions** - Build custom Protege plugins with chunking capabilities
+
+---
+
 ## Example Output
 
 ```

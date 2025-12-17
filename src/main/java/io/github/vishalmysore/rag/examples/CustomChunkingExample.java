@@ -81,14 +81,12 @@ public class CustomChunkingExample {
         System.out.println("Description: " + customStrategy.getDescription());
         System.out.println();
 
-        String sampleText = """
-            Artificial Intelligence is transforming the world. Machine learning algorithms 
-            can now process vast amounts of data. Neural networks are becoming increasingly 
-            sophisticated. Deep learning has enabled breakthroughs in image recognition. 
-            Natural language processing allows computers to understand human language. 
-            Generative AI can create original content. The future of AI is incredibly exciting. 
-            Ethical considerations are paramount as AI advances.
-            """;
+        String sampleText = "Artificial Intelligence is transforming the world. Machine learning algorithms " +
+            "can now process vast amounts of data. Neural networks are becoming increasingly " +
+            "sophisticated. Deep learning has enabled breakthroughs in image recognition. " +
+            "Natural language processing allows computers to understand human language. " +
+            "Generative AI can create original content. The future of AI is incredibly exciting. " +
+            "Ethical considerations are paramount as AI advances.";
 
         OpenAIEmbeddingProvider embeddings = new OpenAIEmbeddingProvider(apiKey, "text-embedding-3-small", 1024);
 

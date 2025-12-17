@@ -299,21 +299,19 @@ public class ChunkingStrategiesExample {
         System.out.println("Domain: Web Content");
         System.out.println("=".repeat(70));
 
-        String htmlContent = """
-            <article>
-              <h1>Complete Guide to RAG Systems</h1>
-              <h2>Introduction</h2>
-              <p>Retrieval Augmented Generation combines information retrieval with language models...</p>
-              <h2>Chunking Strategies</h2>
-              <p>Effective chunking is crucial for RAG performance...</p>
-              <h3>Sliding Window</h3>
-              <p>Sliding window creates overlapping chunks...</p>
-              <h3>Adaptive Chunking</h3>
-              <p>Adaptive chunking respects natural boundaries...</p>
-              <h2>Implementation</h2>
-              <p>When implementing RAG systems, consider...</p>
-            </article>
-            """;
+        String htmlContent = "<article>\n" +
+            "  <h1>Complete Guide to RAG Systems</h1>\n" +
+            "  <h2>Introduction</h2>\n" +
+            "  <p>Retrieval Augmented Generation combines information retrieval with language models...</p>\n" +
+            "  <h2>Chunking Strategies</h2>\n" +
+            "  <p>Effective chunking is crucial for RAG performance...</p>\n" +
+            "  <h3>Sliding Window</h3>\n" +
+            "  <p>Sliding window creates overlapping chunks...</p>\n" +
+            "  <h3>Adaptive Chunking</h3>\n" +
+            "  <p>Adaptive chunking respects natural boundaries...</p>\n" +
+            "  <h2>Implementation</h2>\n" +
+            "  <p>When implementing RAG systems, consider...</p>\n" +
+            "</article>\n";
 
         // Create the strategy from core framework
         ChunkingStrategy strategy = new HTMLTagBasedChunking("h2", true);
